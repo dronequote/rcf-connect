@@ -191,38 +191,95 @@ export function Card({
 
 export function Footer() {
   return (
-    <footer className="text-center py-6 px-4 space-y-3">
-      <div className="flex justify-center gap-6">
+    <footer className="text-center pt-8 pb-6 px-4 space-y-4">
+      {/* Color social icons */}
+      <div className="flex justify-center items-center gap-5">
         <a
-          href="https://www.facebook.com/theriverchristianfellowship"
+          href="https://www.facebook.com/therivertwinfalls"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white/40 hover:text-white/70 transition-colors text-sm"
+          className="hover:scale-110 transition-transform"
+          aria-label="Facebook"
         >
-          Facebook
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="6" fill="#1877F2" />
+            <path d="M16.5 12.05h-2.5V10c0-.83.17-1.4 1.4-1.4h1.1V6.1c-.5-.05-1.1-.1-1.6-.1-2.35 0-3.9 1.45-3.9 4.05v2h-2v2.7h2V21h2.75v-6.25h2.15l.6-2.7z" fill="white" />
+          </svg>
         </a>
         <a
-          href="https://www.instagram.com/therivertwinfalls"
+          href="https://www.instagram.com/theriverchristianfellowship/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white/40 hover:text-white/70 transition-colors text-sm"
+          className="hover:scale-110 transition-transform"
+          aria-label="Instagram"
         >
-          Instagram
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="6" fill="url(#ig)" />
+            <defs>
+              <linearGradient id="ig" x1="2" y1="22" x2="22" y2="2">
+                <stop stopColor="#FFDC80" />
+                <stop offset=".5" stopColor="#F56040" />
+                <stop offset="1" stopColor="#C13584" />
+              </linearGradient>
+            </defs>
+            <rect x="6" y="6" width="12" height="12" rx="3.5" stroke="white" strokeWidth="1.5" fill="none" />
+            <circle cx="12" cy="12" r="3" stroke="white" strokeWidth="1.5" fill="none" />
+            <circle cx="16.5" cy="7.5" r="1" fill="white" />
+          </svg>
         </a>
         <a
-          href="https://www.youtube.com/@TheRiverChristianFellowship"
+          href="https://www.youtube.com/@TheRiverChristianFellowship/featured"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white/40 hover:text-white/70 transition-colors text-sm"
+          className="hover:scale-110 transition-transform"
+          aria-label="YouTube"
         >
-          YouTube
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="6" fill="#FF0000" />
+            <path d="M10 15.5V8.5L16 12L10 15.5Z" fill="white" />
+          </svg>
+        </a>
+        <a
+          href="https://www.tiktok.com/@theriverchristianfellowship"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:scale-110 transition-transform"
+          aria-label="TikTok"
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="6" fill="#000000" />
+            <path d="M16.5 8.5c-.8-.5-1.3-1.3-1.5-2.2V6h-2.2v9.2c0 1.3-1.1 2.3-2.4 2.3s-2.4-1-2.4-2.3 1.1-2.3 2.4-2.3c.3 0 .5 0 .7.1v-2.3c-.2 0-.5-.1-.7-.1-2.5 0-4.6 2-4.6 4.6S8 21.7 10.4 21.7s4.1-1.6 4.1-4.1v-5c.8.6 1.8.9 2.9.9v-2.3c-.4 0-.7-.1-1-.2-.3-.2-.6-.3-.9-.5z" fill="white" />
+          </svg>
+        </a>
+        <a
+          href="https://maps.app.goo.gl/qfsBrSpLFvJ9pBvD6"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:scale-110 transition-transform"
+          aria-label="Google Maps"
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="6" fill="#ffffff" />
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335" />
+            <circle cx="12" cy="9" r="2.5" fill="#ffffff" />
+          </svg>
         </a>
       </div>
-      <p className="text-white/30 text-[10px]">
-        4002 N 3300 E · Twin Falls, ID 83301 · (208) 733-3133
+
+      {/* Address with Google Maps link */}
+      <a
+        href="https://maps.app.goo.gl/qfsBrSpLFvJ9pBvD6"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block text-white/70 text-xs no-underline hover:text-white transition-colors"
+      >
+        4002 N 3300 E · Twin Falls, ID 83301
+      </a>
+      <p className="text-white/70 text-xs">
+        (208) 733-3133
       </p>
-      <p className="text-white/20 text-[10px]">
-        Sundays 10:00 AM & 6:00 PM
+      <p className="text-white/60 text-xs">
+        Sundays 10:00 AM &amp; 6:00 PM
       </p>
     </footer>
   );

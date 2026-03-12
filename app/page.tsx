@@ -71,6 +71,16 @@ export default function Home() {
           ))}
         </div>
 
+        {/* Invite button */}
+        <div className="animate-fade-up delay-7 mt-5">
+          <Link
+            href="/connect/invite"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/[0.08] border border-white/[0.12] text-white/70 text-sm font-medium no-underline hover:bg-white/[0.14] transition-all"
+          >
+            💌 Invite a Friend
+          </Link>
+        </div>
+
         <div className="animate-fade-up delay-7">
           <Footer />
         </div>

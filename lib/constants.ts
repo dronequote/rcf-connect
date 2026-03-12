@@ -16,10 +16,12 @@ export const CHURCH = {
   tagline:
     "A Bible-teaching, non-denominational church in Twin Falls, Idaho",
   social: {
-    facebook: "https://www.facebook.com/theriverchristianfellowship",
-    instagram: "https://www.instagram.com/therivertwinfalls",
-    youtube: "https://www.youtube.com/@TheRiverChristianFellowship",
+    facebook: "https://www.facebook.com/therivertwinfalls",
+    instagram: "https://www.instagram.com/theriverchristianfellowship/",
+    youtube: "https://www.youtube.com/@TheRiverChristianFellowship/featured",
+    tiktok: "https://www.tiktok.com/@theriverchristianfellowship",
   },
+  googleMaps: "https://maps.app.goo.gl/qfsBrSpLFvJ9pBvD6",
 } as const;
 
 export const NESTJS_API = "https://api.leadprospecting.ai";

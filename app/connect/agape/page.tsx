@@ -7,12 +7,6 @@ import { CHURCH } from "@/lib/constants";
 
 const DONOR_PERFECT_URL = CHURCH.donorPerfect;
 
-const donationTiers = [
-  { amount: "10", label: "Feeds 2 people" },
-  { amount: "25", label: "Feeds a family" },
-  { amount: "50", label: "Feeds a table" },
-];
-
 const volunteerRoles = ["Cooking", "Serving", "Setup", "Cleanup"];
 
 export default function AgapePage() {
@@ -28,7 +22,7 @@ export default function AgapePage() {
   });
   const [submitting, setSubmitting] = useState(false);
 
-  const mealsServed = 1247;
+  const mealsServed = 890;
   const mealsGoal = 5000;
   const pct = Math.round((mealsServed / mealsGoal) * 100);
 
@@ -122,31 +116,19 @@ export default function AgapePage() {
             </Card>
 
             <Section label="SUPPORT AGAPE MEALS">
-              <div className="grid grid-cols-3 gap-2.5 mb-3">
-                {donationTiers.map((tier) => (
-                  <a
-                    key={tier.amount}
-                    href={DONOR_PERFECT_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-4 rounded-xl border-2 border-gray-200 bg-white text-center cursor-pointer hover:border-gold hover:bg-gold-light transition-all no-underline"
-                  >
-                    <div className="text-xl font-bold text-church-main">
-                      ${tier.amount}
-                    </div>
-                    <div className="text-[10px] text-gray-400 mt-1">
-                      {tier.label}
-                    </div>
-                  </a>
-                ))}
-              </div>
+              <Card className="mb-3">
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  Your donation feeds families in Twin Falls — every dollar goes
+                  directly to meals and groceries for those in need.
+                </p>
+              </Card>
               <a
                 href={DONOR_PERFECT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full p-3 rounded-xl border-2 border-dashed border-gray-200 bg-white text-sm text-gray-500 text-center cursor-pointer hover:border-gold transition-all no-underline"
+                className="block w-full px-6 py-4 rounded-xl text-base font-semibold text-center cursor-pointer bg-gradient-to-br from-gold to-[#d4b85e] text-church-dark shadow-[0_4px_14px_rgba(200,168,78,0.19)] no-underline mb-4"
               >
-                Other Amount →
+                Donate via DonorPerfect →
               </a>
             </Section>
 
