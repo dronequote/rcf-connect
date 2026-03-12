@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Header, Section, Card, Btn, Input, Tag } from "@/components/ui";
+import { CHURCH } from "@/lib/constants";
+
+const DONOR_PERFECT_URL = CHURCH.donorPerfect;
 
 const donationTiers = [
   { amount: "10", label: "Feeds 2 people" },
@@ -14,10 +17,9 @@ const volunteerRoles = ["Cooking", "Serving", "Setup", "Cleanup"];
 
 export default function AgapePage() {
   const router = useRouter();
-  const [view, setView] = useState<"main" | "donate" | "volunteer" | "success">(
+  const [view, setView] = useState<"main" | "volunteer" | "success">(
     "main"
   );
-  const [donateAmount, setDonateAmount] = useState("");
   const [volunteerForm, setVolunteerForm] = useState({
     first: "",
     last: "",
@@ -122,13 +124,12 @@ export default function AgapePage() {
             <Section label="SUPPORT AGAPE MEALS">
               <div className="grid grid-cols-3 gap-2.5 mb-3">
                 {donationTiers.map((tier) => (
-                  <button
+                  <a
                     key={tier.amount}
-                    onClick={() => {
-                      setDonateAmount(tier.amount);
-                      setView("donate");
-                    }}
-                    className="p-4 rounded-xl border-2 border-gray-200 bg-white text-center cursor-pointer hover:border-gold hover:bg-gold-light transition-all"
+                    href={DONOR_PERFECT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-4 rounded-xl border-2 border-gray-200 bg-white text-center cursor-pointer hover:border-gold hover:bg-gold-light transition-all no-underline"
                   >
                     <div className="text-xl font-bold text-church-main">
                       ${tier.amount}
@@ -136,15 +137,17 @@ export default function AgapePage() {
                     <div className="text-[10px] text-gray-400 mt-1">
                       {tier.label}
                     </div>
-                  </button>
+                  </a>
                 ))}
               </div>
-              <button
-                onClick={() => setView("donate")}
-                className="w-full p-3 rounded-xl border-2 border-dashed border-gray-200 bg-white text-sm text-gray-500 cursor-pointer hover:border-gold transition-all"
+              <a
+                href={DONOR_PERFECT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full p-3 rounded-xl border-2 border-dashed border-gray-200 bg-white text-sm text-gray-500 text-center cursor-pointer hover:border-gold transition-all no-underline"
               >
-                Other Amount
-              </button>
+                Other Amount →
+              </a>
             </Section>
 
             <Section label="VOLUNTEER">
@@ -177,53 +180,6 @@ export default function AgapePage() {
                 </div>
               </Card>
             </Section>
-          </div>
-        )}
-
-        {view === "donate" && (
-          <div className="animate-fade-up">
-            <Section label="DONATION AMOUNT">
-              <div className="grid grid-cols-3 gap-2.5 mb-3">
-                {donationTiers.map((tier) => (
-                  <button
-                    key={tier.amount}
-                    onClick={() => setDonateAmount(tier.amount)}
-                    className={`py-[18px] rounded-[14px] cursor-pointer text-[22px] font-bold text-church-main border-2 transition-all ${
-                      donateAmount === tier.amount
-                        ? "border-gold bg-gold-light"
-                        : "border-gray-200 bg-white"
-                    }`}
-                  >
-                    ${tier.amount}
-                  </button>
-                ))}
-              </div>
-              <Input
-                placeholder="Other amount"
-                value={donateAmount}
-                onChange={setDonateAmount}
-              />
-            </Section>
-
-            <Card className="mb-4 !bg-church-soft !border-church-main/20">
-              <div className="text-xs text-gray-400 font-bold uppercase tracking-wide mb-1">
-                Your Gift to Agape Meals
-              </div>
-              <div className="text-xl font-bold text-church-main">
-                ${donateAmount || "—"}
-              </div>
-              <div className="text-xs text-gray-500 mt-1">
-                100% goes to feeding our community
-              </div>
-            </Card>
-
-            <Btn
-              onClick={() => setView("success")}
-              full
-              disabled={!donateAmount}
-            >
-              Give to Agape Meals
-            </Btn>
           </div>
         )}
 

@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const NESTJS_API = "https://api.leadprospecting.ai";
+const GHL_BASE = "https://services.leadconnectorhq.com";
+const GHL_VERSION = "2021-07-28";
 const LOCATION_ID = process.env.GHL_LOCATION_ID || "";
+const GHL_PIT = process.env.GHL_PIT || "";
+
+const ghlHeaders = {
+  Authorization: `Bearer ${GHL_PIT}`,
+  Version: GHL_VERSION,
+  "Content-Type": "application/json",
+  Accept: "application/json",
+};
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,46 +33,99 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Build tags array
+    if (!LOCATION_ID || !GHL_PIT) {
+      console.log("Missing GHL config. Data:", JSON.stringify(body, null, 2));
+      return NextResponse.json({ success: true });
+    }
+
+    // Build tags
     const tags: string[] = ["RCF Website"];
     if (formTag) tags.push(formTag);
     if (interests.length > 0) tags.push(...interests);
 
-    // Push to NestJS → GHL
-    const payload = {
-      locationId: LOCATION_ID,
-      firstName,
-      lastName: lastName || "",
-      email,
-      phone: phone || "",
-      tags,
-      source: `RCF Website - ${formTag || "General"}`,
-      customFields: [
-        {
-          key: "how_they_connected",
-          value: source,
-        },
-      ],
-    };
+    // Step 1: Search for existing contact by email
+    const searchRes = await fetch(
+      `${GHL_BASE}/contacts/?locationId=${LOCATION_ID}&query=${encodeURIComponent(email)}&limit=1`,
+      { headers: ghlHeaders }
+    );
 
-    // Only call NestJS if we have a location ID configured
-    if (LOCATION_ID) {
-      const response = await fetch(`${NESTJS_API}/api/public/contact`, {
+    let contactId: string | null = null;
+    let isExisting = false;
+
+    if (searchRes.ok) {
+      const searchData = await searchRes.json();
+      const existing = searchData.contacts?.[0];
+
+      if (existing && existing.email?.toLowerCase() === email.toLowerCase()) {
+        // Step 2a: Existing contact — merge tags
+        contactId = existing.id;
+        isExisting = true;
+
+        const existingTags: string[] = existing.tags || [];
+        const mergedTags = [...new Set([...existingTags, ...tags])];
+
+        const updateRes = await fetch(`${GHL_BASE}/contacts/${contactId}`, {
+          method: "PUT",
+          headers: ghlHeaders,
+          body: JSON.stringify({
+            tags: mergedTags,
+          }),
+        });
+
+        if (updateRes.ok) {
+          console.log(
+            `Updated existing contact ${contactId}: merged tags [${mergedTags.join(", ")}]`
+          );
+        } else {
+          const errText = await updateRes.text();
+          console.error(`GHL update failed (${updateRes.status}):`, errText);
+        }
+      }
+    }
+
+    if (!isExisting) {
+      // Step 2b: New contact — create via GHL
+      const createRes = await fetch(`${GHL_BASE}/contacts/`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        headers: ghlHeaders,
+        body: JSON.stringify({
+          locationId: LOCATION_ID,
+          firstName,
+          lastName: lastName || "",
+          email,
+          phone: phone || "",
+          tags,
+          source: `RCF Website - ${formTag || "General"}`,
+        }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error("NestJS API error:", data);
-        // Still return success to user - don't block their experience
+      if (createRes.ok) {
+        const createData = await createRes.json();
+        contactId = createData.contact?.id;
+        console.log(`Created new contact ${contactId}`);
+      } else {
+        const errText = await createRes.text();
+        console.error("GHL create failed:", errText);
       }
-    } else {
-      console.log(
-        "No GHL_LOCATION_ID configured. Contact data:",
-        JSON.stringify(payload, null, 2)
+    }
+
+    // Step 3: Add activity note so it shows up in the contact timeline
+    if (contactId) {
+      const noteLines = [
+        `📋 Form: ${formTag || "General"}`,
+        `Source: ${source}`,
+        interests.length > 0 ? `Interests: ${interests.join(", ")}` : null,
+        isExisting ? `(Returning visitor — tags merged)` : `(New visitor)`,
+      ]
+        .filter(Boolean)
+        .join("\n");
+
+      fetch(`${GHL_BASE}/contacts/${contactId}/notes`, {
+        method: "POST",
+        headers: ghlHeaders,
+        body: JSON.stringify({ body: noteLines }),
+      }).catch((err) =>
+        console.error("Note failed (non-blocking):", err)
       );
     }
 

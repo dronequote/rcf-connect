@@ -8,6 +8,7 @@ export const CHURCH = {
   pastor: "Tim Aulger",
   musicDirector: "Wade Nellermoe",
   prayerContact: { name: "Ron Price", phone: "208-650-8930" },
+  donorPerfect: "https://wl.donorperfect.net/weblink/weblink.aspx?name=E347351&id=15",
   venmo: "@TheRiverCF",
   textToGive: "208-844-4328",
   featuredVerse:

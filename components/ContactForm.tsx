@@ -28,6 +28,8 @@ export default function ContactForm({
     interests: [] as string[],
   });
   const [submitting, setSubmitting] = useState(false);
+  const [showOther, setShowOther] = useState(false);
+  const [otherText, setOtherText] = useState("");
 
   const updateForm = (key: string, value: string) =>
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -53,7 +55,9 @@ export default function ContactForm({
           lastName: formData.last,
           email: formData.email,
           phone: formData.phone,
-          interests: formData.interests,
+          interests: otherText.trim()
+            ? [...formData.interests, `Other: ${otherText.trim()}`]
+            : formData.interests,
           formTag,
           source:
             typeof window !== "undefined" &&
@@ -119,7 +123,25 @@ export default function ContactForm({
                   {interest}
                 </Tag>
               ))}
+              <Tag
+                active={showOther}
+                onClick={() => setShowOther(!showOther)}
+              >
+                Other
+              </Tag>
             </div>
+            {showOther && (
+              <div className="mt-2.5">
+                <input
+                  type="text"
+                  value={otherText}
+                  onChange={(e) => setOtherText(e.target.value)}
+                  placeholder="Tell us what you're interested in..."
+                  className="w-full px-3.5 py-[11px] rounded-[10px] border-2 border-church-main text-sm outline-none bg-white text-gray-900"
+                  autoFocus
+                />
+              </div>
+            )}
           </div>
         )}
 
