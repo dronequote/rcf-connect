@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Step 3: Add activity note so it shows up in the contact timeline
+    // Step 3: Add note + completed task so it shows in both Notes and Activity tabs
     if (contactId) {
       const noteLines = [
         `📋 Form: ${formTag || "General"}`,
@@ -120,12 +120,27 @@ export async function POST(request: NextRequest) {
         .filter(Boolean)
         .join("\n");
 
+      // Note — shows in Notes tab with full detail
       fetch(`${GHL_BASE}/contacts/${contactId}/notes`, {
         method: "POST",
         headers: ghlHeaders,
         body: JSON.stringify({ body: noteLines }),
       }).catch((err) =>
         console.error("Note failed (non-blocking):", err)
+      );
+
+      // Completed task — shows in Activity tab timeline
+      fetch(`${GHL_BASE}/contacts/${contactId}/tasks`, {
+        method: "POST",
+        headers: ghlHeaders,
+        body: JSON.stringify({
+          title: `📋 Form: ${formTag || "General"}`,
+          body: noteLines,
+          completed: true,
+          dueDate: new Date().toISOString(),
+        }),
+      }).catch((err) =>
+        console.error("Task failed (non-blocking):", err)
       );
     }
 
