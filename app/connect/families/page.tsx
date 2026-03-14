@@ -1,12 +1,13 @@
 import ContactForm from "@/components/ContactForm";
-import { INTEREST_TAGS } from "@/lib/constants";
+import { getInterestTags } from "@/lib/data";
 
-export default function FamiliesPage() {
+export default async function FamiliesPage() {
+  const tags = await getInterestTags();
   return (
     <ContactForm
       title="Kids & Families"
       subtitle="Safe, fun programs for every age"
-      interestOptions={INTEREST_TAGS.families}
+      interestOptions={tags.families}
       formTag="Kids & Families"
     />
   );

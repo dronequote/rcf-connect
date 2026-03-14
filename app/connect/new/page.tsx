@@ -1,12 +1,13 @@
 import ContactForm from "@/components/ContactForm";
-import { INTEREST_TAGS } from "@/lib/constants";
+import { getInterestTags } from "@/lib/data";
 
-export default function NewVisitorPage() {
+export default async function NewVisitorPage() {
+  const tags = await getInterestTags();
   return (
     <ContactForm
       title="Welcome to The River"
       subtitle="We'd love to get to know you"
-      interestOptions={INTEREST_TAGS.new}
+      interestOptions={tags.new}
       formTag="New Visitor"
     />
   );

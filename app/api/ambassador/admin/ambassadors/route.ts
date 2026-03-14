@@ -1,0 +1,15 @@
+import { NextResponse } from "next/server";
+import { requireStaffAuth } from "@/lib/auth-utils";
+import { getAmbassadors } from "@/lib/ambassador";
+
+export async function GET(request: Request) {
+  const staff = await requireStaffAuth(request);
+  if (!staff) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    const ambassadors = await getAmbassadors();
+    return NextResponse.json(ambassadors);
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}

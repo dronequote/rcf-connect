@@ -4,6 +4,7 @@ const GHL_BASE = "https://services.leadconnectorhq.com";
 const GHL_VERSION = "2021-07-28";
 const LOCATION_ID = process.env.GHL_LOCATION_ID || "";
 const GHL_PIT = process.env.GHL_PIT || "";
+const NESTJS_API = "https://api.leadprospecting.ai";
 
 const ghlHeaders = {
   Authorization: `Bearer ${GHL_PIT}`,
@@ -143,6 +144,23 @@ export async function POST(request: NextRequest) {
         console.error("Task failed (non-blocking):", err)
       );
     }
+
+    // Step 4: Sync to LPai MongoDB so contacts appear in the CRM dashboard
+    fetch(`${NESTJS_API}/api/public/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        locationId: LOCATION_ID,
+        firstName,
+        lastName: lastName || "",
+        email,
+        phone: phone || "",
+        tags,
+        source: `RCF Website - ${formTag || "General"}`,
+      }),
+    }).catch((err) =>
+      console.error("NestJS sync failed (non-blocking):", err)
+    );
 
     return NextResponse.json({ success: true });
   } catch (error) {
